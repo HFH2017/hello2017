@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>轮播图</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul{
+            list-style: none;
+        }
+        #container{
+            width: 640px;
+            height: 427px;
+            margin: 100px auto;
+            position: relative;
+        }
+        #img img{
+            display: none;
+        }
+
+        #img .selected{
+            display: block;
+        }
+        #menu .selected{
+            background-color: chocolate;
+        }
+        #menu li{
+            width: 20px;
+            height: 20px;
+            background-color: black;
+            color: white;
+            margin-right: 5px;
+            text-align: center;
+            line-height: 20px;
+            float: left;
+            cursor: pointer;
+        }
+        #menu{
+            position: absolute;
+            right: 10px;
+            bottom: 20px;
+        }
+        #arrows{
+            left: 10px;
+            bottom: 20px;
+            position: absolute;
+        }
+        #arrows span{
+            width: 20px;
+            height: 20px;
+            background-color: black;
+            color: white;
+            margin-left: 5px;
+            text-align: center;
+            line-height: 20px;
+            float: left;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="img">
+            <img src="tui1.jpg" class="selected">
+            <img src="tui2.png"/>
+            <img src="tui3.jpg"/>
+            <img src="tui4.png"/>
+        </div>
+        <ul id="menu">
+            <li  class="selected">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ul>
+        <span id="arrows">
+            <span id="pre">&lt;</span>
+            <span id="nxt">&gt;</span>
+        </span>
+    </div>
+    <script>
+        var oMenu = document.getElementById('menu');
+        var oLi = oMenu.getElementsByTagName('li');
+        var oDiv = document.getElementById('img');
+        var oImgs = oDiv.getElementsByTagName('img');
+        var oPre = document.getElementById('pre');
+        var oNxt = document.getElementById('nxt');
+        var oContainer = document.getElementById('container');
+        var iNows = 0;/*当前图片的索引*/
+        var timer;
+        for(var i=0;i<oLi.length;i++){
+            oLi[i].index=i;
+            oLi[i].onclick = function() {
+                iNows = this.index;
+                changeImgs();
+            }
+        }
+        oPre.onclick = oNxt.onclick = function(){
+            if(this == oNxt){
+                iNows++;
+                if(iNows == oImgs.length){
+                    iNows=0;
+                }
+            }else{
+                iNows--;
+                if(iNows == -1){
+                    iNows = oImgs.length-1;
+                }
+            }
+           changeImgs();
+        };
+        var changeImgs = function(){
+            for(var i=0;i<oLi.length;i++){
+                oLi[i].className = '';
+                oImgs[i].className = '';
+            }
+            oLi[iNows].className = 'selected';
+            oImgs[iNows].className = 'selected';
+        };
+        play();
+        oContainer.onmouseover = function(){
+             clearInterval(timer);
+        };
+        oContainer.onmouseout = function(){
+            play();
+        };
+        function play(){
+            timer = setInterval(function(){
+                oNxt.onclick();
+            },500)
+        }
+
+    </script>
+</body>
+</html>

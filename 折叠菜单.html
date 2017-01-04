@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>折叠菜单</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul{
+            list-style: none;;
+        }
+        #menu{
+            width: 200px;
+            border: 1px solid #000;
+        }
+        #menu h3{
+            width: 200px;
+            height: 35px;
+            background-color: #000000;
+            color: #fff;
+            line-height: 35px;
+        }
+        #menu .menu1{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <ul id="menu">
+        <li>
+            <h3>管理区</h3>
+            <ul class="menu1">
+                <li>001</li>
+                <li>002</li>
+                <li>003</li>
+            </ul>
+        </li>
+        <li>
+            <h3>交流区</h3>
+            <ul class="menu1">
+                <li>001</li>
+                <li>002</li>
+                <li>003</li>
+            </ul>
+        </li>
+    </ul>
+    <script>
+        var oMenu = document.getElementById('menu');
+        var aH3 = oMenu.getElementsByTagName('h3');
+        for(var i=0;i<aH3.length;i++){
+            aH3[i].bShow = false;
+            aH3[i].onclick = function(){
+                var oU1 = text( this );
+                if(this.bShow){
+                    oU1.style.display = 'none';
+                }else{
+                    oU1.style.display = 'block';
+                }
+                this.bShow = !this.bShow;
+            };
+        }
+        var text = function(elem){
+            do{
+                elem = elem.nextSibling;
+            }while(elem && elem.nodeType!=1);
+            return elem;
+        }
+    </script>
+</body>
+</html>
