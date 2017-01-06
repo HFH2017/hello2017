@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>无缝滚动</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #container{
+            width: 500px;
+            height: 300px;
+            border: 1px solid black;
+            margin: 100px auto;
+            position: relative;
+            left: 0;
+            overflow: hidden;
+        }
+        #arrows{
+            width: 640px;
+            height: 200px;
+            float: left;
+            position:relative;
+        }
+        #arrows span{
+            width: 150px;
+            height: 120px;
+            background-color: black;
+            margin-right: 10px;
+            color: white;
+            font-size: 50px;
+            text-align: center;
+            line-height: 120px;
+            float: left;
+        }
+        #arrow{
+            position: absolute;
+            left: 50%;
+            margin-left: -60px;
+            bottom: 20px;
+            float: left;
+            width: 120px;
+            height: 50px;
+        }
+        #arrow span{
+            width: 50px;
+            height: 30px;
+            background-color: #cccccc;
+            color: black;
+            float: left;
+            margin-right: 5px;
+            text-align: center;
+            line-height: 30px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <span id="arrows">
+            <span>1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+        </span>
+        <span id="arrow">
+            <span id="pre">向左</span>
+            <span id="nxt">向右</span>
+        </span>
+    </div>
+    <script>
+        var oSpan = document.getElementById('arrows');
+        var oPre = document.getElementById('pre');
+        var oNxt = document.getElementById('nxt');
+        var speed = 5;
+        oSpan.innerHTML += oSpan.innerHTML;
+        oSpan.style.width = oSpan.offsetWidth*2 + 'px';
+        setInterval(function(){
+            oSpan.style.left = oSpan.offsetLeft - speed +'px';
+            if(oSpan.offsetLeft <= -oSpan.offsetWidth/2){
+                oSpan.style.left = 0;
+            }
+            if(oSpan.offsetLeft>0){
+                oSpan.style.left = -oSpan.offsetWidth/2 + 'px';
+            }
+        },30);
+        oPre.onclick = oNxt.onclick = function(){
+            if(this == oNxt){
+                speed = -10;
+            }else{
+                speed = 10;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>轮播图练习</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul{
+            list-style: none;
+        }
+        #container{
+            width: 640px;
+            height: 427px;
+            position: relative;
+            margin: 100px auto;
+        }
+        #Imgs img{
+            position: absolute;
+        }
+        #menu{
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 999;
+        }
+       #menu li{
+           width: 20px;
+           height: 20px;
+           background-color: black;
+           color: white;
+           text-align: center;
+           line-height: 20px;
+           z-index: 9999;
+           float: left;
+           margin-left:5px;
+           cursor: pointer;
+       }
+        #menu .selected{
+            background-color: chocolate;
+        }
+        #arrows{
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 999;
+        }
+        #arrows span{
+            width: 20px;
+            height: 20px;
+            background-color: black;
+            color: white;
+            float: left;
+            margin-right:5px;
+            text-align: center;
+            line-height: 20px;
+            cursor: pointer;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="Imgs">
+            <img src="tui1.jpg" style="z-index: 4;" />
+            <img src="tui2.png" style="z-index: 3;"/>
+            <img src="tui3.jpg" style="z-index: 2;"/>
+            <img src="tui4.png" style="z-index: 1;"/>
+        </div>
+        <ul id="menu">
+            <li class="selected">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ul>
+        <span id="arrows">
+            <span id="pre">&lt;</span>
+            <span id="nxt">&gt;</span>
+        </span>
+    </div>
+    <script src="jslib.js"></script>
+    <script>
+        var oDiv = document.getElementById('Imgs');
+        var oImgs = oDiv.getElementsByTagName('img');
+        var oMenu = document.getElementById('menu');
+        var oLi = oMenu.getElementsByTagName('li');
+        var oPre = document.getElementById('pre');
+        var oNxt = document.getElementById('nxt');
+        var oContainer = document.getElementById('container');
+        var iNows = 0;/*图片索引*/
+        var zindex = 4;
+        var timer;
+        for(var i=0;i<oLi.length;i++){
+            oLi[i].index = i;
+            oLi[i].onmouseover = function(){
+                iNows = this.index;
+                for(var i=0;i<oLi.length;i++){
+                    oLi[i].className='';
+                }
+                this.className='selected';
+                oImgs[this.index].style.opacity = 0;
+                oImgs[this.index].style.filter = 'alpha(opacity=0)';
+                oImgs[this.index].style.zIndex = ++zindex;
+                animate(oImgs[this.index],{
+                    opacity:100
+                });
+            };
+        }
+        oPre.onclick = oNxt.onclick = function(){
+            if(this == oNxt){
+                iNows++;
+                if(iNows == oImgs.length){
+                    iNows = 0;
+                }
+            }else{
+                iNows--;
+                if(iNows == -1){
+                    iNows = oImgs.length-1;
+                }
+
+            }
+            oLi[iNows].onmouseover();
+        };
+        play();
+//        oContainer.onmousemove = function(){
+//            clearInterval(timer);
+//        };
+////        oContainer.onmouseout = function(){
+////            play();
+////        }
+         oContainer.onmousemove = function(){
+             clearInterval(timer);
+         };
+        oContainer.onmouseout = function(){
+            play();
+        };
+
+        function play(){
+             timer = setInterval(function(){
+                oNxt.onclick();
+            },500)
+        }
+
+
+    </script>
+</body>
+</html>
