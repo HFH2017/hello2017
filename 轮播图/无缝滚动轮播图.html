@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>无缝滚动轮播图</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul{
+            list-style: none;
+        }
+        #container{
+            width: 640px;
+            height: 427px;
+            margin: 100px auto;
+            position: relative;
+            overflow: hidden;
+            left: 0;
+        }
+        #img img{
+            float: left;
+        }
+        #img{
+            width: 2562px;
+            height: 427px;
+            position: relative;
+        }
+        #menu{
+            position: absolute;
+            bottom: 10px;
+            right: 250px;
+        }
+        #menu li{
+            width: 20px;
+            height: 20px;
+            background-color: #cccccc;
+            color: white;
+            margin-right: 5px;
+            text-align: center;
+            line-height: 20px;
+            cursor: pointer;
+            float: left;
+        }
+        #menu .selected{
+            background: chocolate;
+        }
+        /*#arrows{*/
+            /*position: absolute;*/
+            /*bottom: 10px;*/
+            /*left: 10px;*/
+            /*z-index: 9999;*/
+        /*}*/
+        #pre{
+            position: absolute;
+            bottom: 150px;
+            left:0;
+        }
+        #nxt{
+            position: absolute;
+            bottom: 150px;
+            right: 0;
+        }
+        #arrows span{
+            width: 50px;
+            height: 120px;
+            background: black;
+            color: white;
+            line-height: 120px;
+            cursor: pointer;
+            float: left;
+            text-align: center;
+            opacity: 0.6;
+            font-size: 25px;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="img">
+            <img src="tui1.jpg"/>
+            <img src="tui2.png"/>
+            <img src="tui3.jpg"/>
+            <img src="tui4.jpg"/>
+        </div>
+        <ul id="menu">
+            <li  class="selected">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ul>
+            <span id="arrows">
+                <span id="pre">&lt;</span>
+                <span id="nxt">&gt;</span>
+            </span>
+    </div>
+    <script src="jslib.js"></script>
+    <script>
+       window.onload = function(){
+           var oDiv = document.getElementById('img');
+           var oImgs = oDiv.getElementsByTagName('img');
+           var oMenu = document.getElementById('menu');
+           var oLi = oMenu.getElementsByTagName('li');
+           var oImgwidth = oImgs[0].offsetWidth;
+           var oPre = document.getElementById('pre');
+           var oNxt = document.getElementById('nxt');
+           var oContainer = document.getElementById('container');
+           var iNows = 0;
+           var speed = 5;
+//           oDiv.innerHTML += oDiv.innerHTML;
+//           oDiv.style.width = oDiv.offsetWidth*2 + 'px';
+           oDiv.appendChild(oImgs[0].cloneNode());
+           oDiv.style.width = oImgwidth * oImgs.length+ 1 + 'px';
+           for(var i=0;i<oLi.length;i++) {
+               oLi[i].index = i;
+               oLi[i].onmouseover = function () {
+                   iNows = this.index;
+                   changimges();
+               };
+           }
+           oPre.onclick = oNxt.onclick = function(){
+               if(this == oNxt){
+                   iNows++;
+                   if(iNows == oImgs.length){
+                       iNows = 1;
+                       oDiv.style.left = 0;
+                   }
+               }else{
+                   iNows--;
+                   if(iNows == -1){
+                       iNows = oImgs.length - 2;
+                       oDiv.style.left = -(oImgs.length - 1)*oImgwidth + 'px';
+                   }
+               }
+               changimges();
+           };
+           function changimges(){
+               for (var i = 0; i < oLi.length; i++) {
+                   oLi[i].className = '';
+               }
+               oLi[iNows==oLi.length?0:iNows].className = 'selected';
+               animate(oDiv,{
+                   left: -iNows*oImgwidth
+               });
+           }
+           play();
+           oContainer.onmouseover = function(){
+               clearInterval(timer);
+           };
+           oContainer.onmouseout = function(){
+               play();
+           };
+           function play(){
+               timer = setInterval(function(){
+                   oNxt.onclick();
+               },2000);
+           }
+       };
+    </script>
+</body>
+</html>
