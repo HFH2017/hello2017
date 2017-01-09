@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>放大镜</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #menu{
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        #magnifier{
+            width: 100px;
+            height: 100px;
+            background: black;
+            opacity: 0.4;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #bigimg{
+            position: absolute;
+            top: 0;
+            left: 400px;
+            width: 500px;
+            height: 500px;
+            overflow: hidden;
+        }
+        #img2{
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        #container img{
+            display: none;
+        }
+        #container .selected{
+            display: block;
+        }
+        #magnifier{
+            display: none;
+            cursor: pointer;
+            position: absolute;
+        }
+        #pointer{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="menu">
+            <img src="1.jpg"  id="img1" class="selected"/>
+            <span id="magnifier"></span>
+        </div>
+        <div id="bigimg">
+            <div id="bigimg1">
+                <img src="2.jpg" id="img2"/>
+            </div>
+        </div>
+    </div>
+    <script>
+        var oMenu = document.getElementById('menu');
+        var oBigimg = document.getElementById('bigimg');
+        var oImg2 = document.getElementById('img2');
+        var oSpan = document.getElementById('magnifier');
+        var oPointer = document.getElementById('pointer');
+        var oBigimg1 = document.getElementById('bigimg1')
+        oMenu.onmouseover = function(e){
+            e = e || window.event;
+            oImg2.className = 'selected';
+            oSpan.style.display = 'block';
+            oSpan.style.top = e.clientY - oSpan.offsetHeight+ 'px';
+            oSpan.style.left = e.clientX  - oSpan.offsetWidth+ 'px';
+            oSpan.onmousedown();
+        };
+        oMenu.onmouseout = function(){
+            oImg2.className = '';
+            oSpan.style.display = 'none';
+        };
+        oSpan.onmousedown = function(e){
+            e = e || window.event;
+            var iDix = e.clientX - oSpan.offsetLeft;
+            var iDiy = e.clientY - oSpan.offsetTop;
+            iDix = oSpan.offsetWidth/2;
+            iDiy = oSpan.offsetHeight/2;
+           document.onmousemove = function(e){
+                var Ix = e.clientX - iDix;
+                var Iy = e.clientY - iDiy;
+                if(Ix < 0){
+                    Ix = 0;
+                }
+                if(Ix > oMenu.offsetWidth - oSpan.offsetWidth){
+                    Ix = oMenu.offsetWidth - oSpan.offsetWidth;
+                }
+                if(Iy<0){
+                    Iy = 0;
+                }
+                if(Iy > oMenu.offsetHeight - oSpan.offsetHeight){
+                    Iy = oMenu.offsetHeight - oSpan.offsetHeight;
+                }
+               var maxwidth = oMenu.offsetWidth - oSpan.offsetWidth;
+               var fScale = Ix/maxwidth;
+               var maxheight =  oMenu.offsetHeight - oSpan.offsetHeight;
+               var fScaley = Iy/maxheight;
+               oImg2.style.left = -fScale * (oBigimg.offsetLeft-oSpan.offsetWidth) + 'px';
+               oImg2.style.top =- fScaley * (oBigimg.offsetHeight-2*oSpan.offsetHeight) + 'px';
+                oSpan.style.left = Ix + 'px';
+                oSpan.style.top = Iy + 'px';
+            }
+        }
+
+    </script>
+
+</body>
+</html>
