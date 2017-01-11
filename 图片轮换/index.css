@@ -1,0 +1,78 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+img{
+    border: none;
+}
+body{
+    background: #333333;
+}
+#container{
+    width: 570px;
+    height: 500px;
+    position: relative;
+    margin: 100px auto;
+    overflow: hidden;
+}
+#big-img{
+    width: 570px;
+    height: 400px;
+    position: relative;
+}
+#big-img img{
+    width: 570px;
+    height: 400px;
+    position: absolute;
+}
+#move-img{
+    width: 1130px;
+    height: 100px;
+    background: #eeeeee;
+    position: absolute;
+    left: 0;
+
+}
+#move-img img{
+    width: 130px;
+    height: 80px;
+    float: left;
+    padding: 10px 0 10px 10px;
+}
+#span{
+    width: 560px;
+    height: 30px;
+    background: black;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    opacity: 0.5;
+    filter:alpha(opacity=50);
+    text-align: center;
+    line-height: 30px;
+    padding-right: 10px;
+}
+#span span{
+    color: white;
+    float: right;
+}
+#turn span{
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 50%;
+    margin-top: -30px;
+    background-image: url("btn.gif");
+    background-repeat: no-repeat;
+    opacity: 0;
+    filter: alpha(opacity=0);
+
+}
+#pre{
+    left: 10px;
+    background-position: 0 0;
+}
+#nxt{
+     right: 10px;
+     background-position: 0 -60px;
+ }

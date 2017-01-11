@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>图片轮换</title>
+    <link rel="stylesheet" href="index.css"/>
+</head>
+<body>
+    <div id="container">
+        <div id="big-img">
+            <img src="1.jpg" alt=""/>
+            <img src="2.jpg" alt=""/>
+            <img src="3.jpg" alt=""/>
+            <img src="4.jpg" alt=""/>
+            <img src="5.jpg" alt=""/>
+            <img src="6.jpg" alt=""/>
+            <img src="7.jpg" alt=""/>
+            <img src="8.jpg" alt=""/>
+            <div id="span" style="z-index: 19">
+                <span id="num1">/8</span>
+                <span id="num2">1</span>
+            </div>
+            <div id="turn">
+                <span id="pre" style="z-index: 100"></span>
+                <span id="nxt" style="z-index: 100"></span>
+            </div>
+        </div>
+        <div id="move-img">
+            <img src="1.jpg"/>
+            <img src="2.jpg"/>
+            <img src="3.jpg"/>
+            <img src="4.jpg"/>
+            <img src="5.jpg"/>
+            <img src="6.jpg"/>
+            <img src="7.jpg"/>
+            <img src="8.jpg"/>
+        </div>
+
+    </div>
+    <script src="jslib.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
