@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>个性化按钮</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul{
+            list-style: none;
+        }
+        #container{
+            width: 50px;
+            height: 50px;
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+        }
+        #menu li,#home{
+            width: 50px;
+            height: 50px;
+            position: absolute;
+        }
+        #menu li{
+            left: 0;
+            top: 0;
+            -webkit-transition: all 1s ease;
+        }
+        #home{
+            -webkit-transition: transform 1s ease;
+        }
+
+    </style>
+</head>
+<body>
+<div id="container">
+    <ul id="menu">
+        <li><img class="menu" src="imgs/close.png" alt=""/></li>
+        <li><img class="menu" src="imgs/full.png" alt=""/></li>
+        <li><img class="menu" src="imgs/open.png" alt=""/></li>
+        <li><img class="menu" src="imgs/prev.png" alt=""/></li>
+        <li><img class="menu" src="imgs/refresh.png" alt=""/></li>
+    </ul>
+    <div id="home">
+        <img src="imgs/home.png" alt=""/>
+    </div>
+</div>
+<script>
+    var oHome = document.getElementById('home');
+    var oMenu = document.getElementById('menu');
+    var aLi = oMenu.getElementsByTagName('li');
+    var bClick = false;
+    oHome.onclick = function(){
+        if(!bClick){
+            this.style.transform = 'rotate(-360deg)';
+            for(var i=0;i<5;i++){
+                aLi[i].style.WebkitTransitionDelay = 0.1*i+'s';
+                aLi[i].style.transform = 'rotate(-360deg) scale(1)';
+                aLi[i].style.left = -150*Math.sin(22.5*i*Math.PI/180)+'px';
+                aLi[i].style.top = - 150 * Math.cos(22.5*i*Math.PI/180) + 'px';
+            }
+        }else{
+            this.style.transform = 'rotate(0deg)';
+            for(var i=0;i<5;i++){
+                aLi[i].style.transitionDuration = '1s';
+                aLi[i].style.WebkitTransitionDelay = 0.1*(4-i)+'s';
+                aLi[i].style.transform = 'rotate(0deg) scale(1)';
+                aLi[i].style.left = 0 + 'px';
+                aLi[i].style.top = 0 + 'px';
+            }
+        }
+       bClick = !bClick;
+    };
+    var fn = function(){
+        this.style.transitionDuration = '0.1s';
+        this.style.transform = 'rotate(-360deg) scale(1) ';
+        this.style.opacity = 1;
+        this.removeEventListener('webkitTransitionEnd',fn,false);
+    };
+    for(var i=0;i<5;i++){
+        aLi[i].onclick = function(){
+            this.style.transitionDuration = '0.2s';
+            this.style.transform='rotate(-360deg) scale(1.5)';
+            this.style.opacity = '0.5';
+            this.addEventListener('webkitTransitionEnd',fn,false);
+        };
+    }
+</script>
+</body>
+</html>
