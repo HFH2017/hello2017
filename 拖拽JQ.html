@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #container{
+            width: 200px;
+            height: 200px;
+            background: red;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <script src="jqueryNew.js"></script>
+    <script>
+        $(function(){
+           var $container = $('#container');
+            $container.on('mousedown',function(e){
+                var X = e.pageX - $container.offset().left;
+                var Y = e.pageY - $container.offset().top;
+                $(document).on('mousemove',function(e){
+                    var iLeft = e.pageX - X;
+                    var iTop = e.pageY - Y;
+                    $container.offset({
+                        left:iLeft,
+                        top:iTop
+                    });
+                    e.preventDefault();//阻止默认行为
+                    //return false
+                });
+                $container.on('mouseup',function(){
+                    $(document).off('mousemove');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
