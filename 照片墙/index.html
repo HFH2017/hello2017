@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<style>
+    body{
+        background: url(img/bg.jpg);
+        overflow: hidden;
+    }
+    #container{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    #container .img{
+        position: absolute;
+        cursor: pointer;
+        border: 6px solid #fff;
+        box-shadow: 2px 2px 2px rgba(0,0,0,0.7);
+        -webkit-transition: all 1.5s ease-in-out;
+        -moz-transition: all 1.5s ease-in-out;
+        -o-transition: all 1.5s ease-in-out;
+        transition: all 1.5s ease-in-out;
+
+    }
+    #container .img.piece{
+        border:1px solid #ffffff;
+        box-shadow: 0px 0px 2px black;
+    }
+    #container .img span{
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        -webkit-transition: opacity 1.5s ease-in-out;
+        -moz-transition: opacity 1.5s ease-in-out;
+        -o-transition: opacity 1.5s ease-in-out;
+        transition: opacity 1.5s ease-in-out;
+    }
+    #prev,#next{
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        top: 50%;
+        margin-top: -30px;
+        border: 1px solid #ggg;
+        box-shadow: 0 0 1px rgba(0,0,0,0.7);
+        z-index: 1;
+        opacity: 0.6;
+        display: none;
+    }
+    #prev{
+        left:-20px;
+        background: url(img/prev.png) center no-repeat #fff;
+        border-radius: 0 8px 8px 0;
+    }
+    #next{
+        right:-20px;
+        background: url(img/next.png) center no-repeat #fff;
+        border-radius:8px 0 0 8px;
+    }
+</style>
+<body>
+<div id="container">
+
+</div>
+<a id="prev" href="javascript:;"></a>
+<a id="next" href="javascript:;"></a>
+<script>
+    (function(){
+        var oContainer = document.getElementById('container');
+        var oPrev = document.getElementById('prev');
+        var oNext = document.getElementById('next');
+        var ROW = 4,//图片阵列的行数
+                COL = 6,//图片阵列的列数
+                NUM = ROW*COL,//阵列总数
+                BIG_IMG_WIDTH =750,//大图宽度
+                BIG_IMG_HEIGHT = 500,//大图高度
+                THUMB_IMG_WIDTH = THUMB_IMG_HEIGHT = 125;//缩略图宽度和高度
+        var bClicked = false;//
+        var iNow = 0;//表示显示的大图的索引
+        //预先加载图片，包括所有大图小图
+
+        var iLoaded = 0;//记录加载图片的数量
+
+        for(var i=0;i<NUM;i++){
+            var oBigImg = new Image();
+            oBigImg.src = 'img/'+ (i+1)  + '.jpg';
+            oBigImg.onload = function(){
+               // iLoaded++;
+                if(++iLoaded == NUM*2){//所有图片全部加载完毕
+                    //
+                    loadsuccess();
+                }
+            };
+            var oThumbImg = new Image();
+            oThumbImg.src = 'img/thumbs/' + (i+1) + '.jpg';
+            oThumbImg.onload = function(){
+                if(++iLoaded == NUM*2){
+                    //
+                    loadsuccess();
+                }
+            };
+        }
+
+        function loadsuccess(){
+            var index = 0;//表示图片格子的索引
+            var iColGap = (oContainer.offsetWidth-COL*THUMB_IMG_WIDTH)/(COL+1),//列之间的间隙
+                 iRowGap = (oContainer.offsetHeight-ROW*THUMB_IMG_WIDTH)/(ROW+1);//行之间的间隙
+
+            for(var i=0;i<ROW;i++){
+                for(var j=0;j<COL;j++){
+                    var oDiv = document.createElement('div');
+                    oDiv.pos ={
+                        left:parseInt(iColGap+j*(iColGap+THUMB_IMG_WIDTH)),
+                        top:parseInt(iRowGap + i*(iRowGap+THUMB_IMG_WIDTH))
+                    };
+
+                    oDiv.index = index;
+                    oDiv.matrix = {//一个矩阵对象用来记住各自的行和列
+                      col:j,
+                        row:i
+                    };
+                    oDiv.style.left = (-Math.random()*300 - 200)+'px';
+                    oDiv.style.top = (-Math.random()*300 - 200)+'px';
+                    oDiv.className = 'img';
+                    oDiv.style.width = THUMB_IMG_WIDTH+'px';
+                    oDiv.style.height = THUMB_IMG_WIDTH+'px';
+                    oDiv.style.background = 'url(img/thumbs/'+(index+1)+'.jpg)';
+                    oDiv.innerHTML = '<span></span>';
+                    oContainer.appendChild(oDiv);
+                    index++;
+                }
+            }
+            var aImg = document.getElementsByClassName('img');
+            index--;//上面循环结束后 index为24
+            var timer = setInterval(function(){
+               aImg[index].style.left = aImg[index].pos.left + 'px';
+               aImg[index].style.top = aImg[index].pos.top + 'px';
+               setStyle3d(aImg[index],'transform','rotate('+(Math.random()*40-20)+'deg)');
+//                aImg[index].onclick = function(){
+//
+//                };
+             //  aImg[index].style.WebkitTranform =
+                aImg[index].addEventListener('click',clickHandler,false);
+
+               index--;
+               if(index == -1){
+                   clearInterval(timer);
+               }
+           },100);
+            function clickHandler(){
+                if(bClicked){ //为1表示点击过格子
+
+                    for(var i=0;i<aImg.length;i++){
+                        var oSpan =  aImg[i].getElementsByTagName('span')[0];
+                        oSpan.style.opacity = 0;
+                        aImg[i].className = 'img';
+                        aImg[i].style.left = aImg[i].pos.left + 'px';
+                        aImg[i].style.top = aImg[i].pos.top + 'px';
+                        setStyle3d(aImg[i],'transform','rotate('+(Math.random()*40-20)+'deg)');
+
+
+                    }
+                    oPrev.style.display = oNext.style.display = 'none';
+
+
+                }else{//整体合并
+                    var bigImgPos ={
+                        left:(oContainer.offsetWidth-BIG_IMG_WIDTH)/2,
+                        top:(oContainer.offsetHeight-BIG_IMG_HEIGHT)/2
+                    };
+                    for(var i=0;i<aImg.length;i++){
+                        var oSpan =  aImg[i].getElementsByTagName('span')[0];
+                        var spanLeft = -(aImg[i].matrix.col*THUMB_IMG_WIDTH);
+                        var spanTop = -(aImg[i].matrix.row*THUMB_IMG_HEIGHT);
+                        oSpan.style.background='url(img/'+(this.index+1)+'.jpg)'+spanLeft+'px '+spanTop+'px no-repeat';
+                        oSpan.style.opacity = 1;
+                        aImg[i].style.left = bigImgPos.left + aImg[i].matrix.col*(THUMB_IMG_WIDTH+1)+'px';
+                        aImg[i].style.top = bigImgPos.top + aImg[i].matrix.row*(THUMB_IMG_HEIGHT+1)+'px';
+                        setStyle3d(aImg[i],'transform','rotate(0deg)');
+                        aImg[i].className = 'img piece';
+                    }
+                    oPrev.style.display = oNext.style.display = 'block';
+
+                }
+                bClicked = !bClicked;
+            }
+            oPrev.onclick = oNext.onclick = function(){
+                if(this == oPrev){
+                    iNow--;
+                    if(iNow == -1){
+                        iNow = NUM -1;
+                    }
+                }else{
+                    iNow++;
+                    if(iNow == NUM){
+                        iNow = 0;
+                    }
+                }
+                var arr = [];
+                for(var i=0;i<NUM;i++){
+                    arr.push(i);
+                }
+                arr.sort(function(){
+                   return Math.random() - 0.5;
+                });
+                var timer = setInterval(function(){
+                    var itm = arr.pop();
+                    var oSpan =  aImg[itm].getElementsByTagName('span')[0];
+                    var spanLeft = -(aImg[itm].matrix.col*THUMB_IMG_WIDTH);
+                    var spanTop = -(aImg[itm].matrix.row*THUMB_IMG_HEIGHT);
+                    oSpan.style.background='url(img/'+(iNow+1)+'.jpg)'+spanLeft+'px '+spanTop+'px no-repeat';
+                    if(arr.length == 0){
+                        clearInterval(timer);
+                    }
+                },30);
+            };
+
+        }
+
+//        oContainer.addEventListener('click',function(e){
+//            if(e.target.className == 'img'|| e.target.tagName == 'SPAN' ){
+//
+//            }
+//        },false);
+
+        function setStyle3d(elem,attr,value){
+            ['Webkit','Moz','Ms','O',''].forEach(function(prefix){
+                elem.style[prefix+attr.charAt(0).toUpperCase()+attr.substr(1)]=value; //elem.style.WekitTranform
+            });
+        }
+
+
+
+
+
+
+
+
+
+    })();
+</script>
+</body>
+</html>
